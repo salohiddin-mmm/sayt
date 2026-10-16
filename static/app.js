@@ -144,7 +144,7 @@ bot_title:"Confirm via Telegram",bot_hint:"The code is sent via Telegram. You ne
 menu_my:"My jobs",menu_admin:"Admin panel",my_title:"My jobs",my_empty:"You have not posted any jobs yet.",my_confirm:"Confirm deletion?",st_pending:"Under review",st_approved:"Published",st_rejected:"Rejected",st_hidden:"Hidden",delete:"Delete",
 adm_title:"Moderation",adm_pending:"New",adm_hidden:"Reported",adm_empty:"Nothing here yet.",adm_approve:"Approve",adm_reject:"Reject",adm_reports:"Reports:",
 p_sal_mln:"Salary, mln UZS (optional)",p_extra:"Extra",x_none:"None",p_remote:"Remote work",p_req:"Requirements",p_need_login:"Log in as an employer to post a job.",p_ok_admin:"The job is live.",
-del_h:"Delete account",del_t:"Your account and all your jobs will be deleted permanently. This cannot be undone.",del_btn:"Delete account",del_confirm:"Delete the account permanently?",del_need_pw:"Enter your password.",
+del_h:"Delete account",del_t:"Your account and all your jobs will be deleted permanently. This cannot be undone.",del_btn:"Delete account",del_confirm:"Delete the account permanently?",del_btn:"Delete account",
 e_net_t:"Cannot connect",empty_all_t:"No jobs yet",empty_all_d:"Post the first job or come back later.",
 e_job:"Fill in the fields correctly (title, description, contact, region).",e_salary:"The salary is invalid.",e_employer:"Only employers can post jobs.",e_forbidden:"Access denied.",e_notfound:"Not found.",
 e_h:"For employers",e_p:"Looking for staff? Post a job and it will appear on the site after review.",
@@ -155,7 +155,7 @@ foot1:"Gathers jobs from open channels into one list.",foot3:"Demo design: the l
 c_all:"All",c_sales:"Sales",c_transport:"Transport",c_edu:"Education",c_office:"Office",c_it:"IT",c_service:"Service",c_build:"Construction"}
 };
 
-/* ---------- Hududlar: viloyat -> tumanlar ---------- */
+/* ---------- Hududlar ---------- */
 const REG={
 "Toshkent shahri":{ru:"город Ташкент",d:["Bektemir","Chilonzor","Mirobod","Mirzo Ulug'bek","Olmazor","Sergeli","Shayxontohur","Uchtepa","Yakkasaroy","Yashnobod","Yunusobod"]},
 "Toshkent viloyati":{ru:"Ташкентская область",d:["Nurafshon sh.","Angren sh.","Olmaliq sh.","Chirchiq sh.","Bekobod","Bo'ka","Bo'stonliq","Chinoz","Ohangaron","Oqqo'rg'on","Parkent","Piskent","Qibray","Quyi Chirchiq","O'rta Chirchiq","Yangiyo'l","Yuqori Chirchiq","Zangiota","Toshkent tumani"]},
@@ -177,7 +177,7 @@ const REG_EN={"Toshkent shahri":"Tashkent city","Toshkent viloyati":"Tashkent re
 const CATS=["all","sales","transport","edu","office","it","service","build"];
 const PAGE=10;
 
-/* ---------- Yordamchi ---------- */
+/* ---------- Yordamchi Funksiyalar ---------- */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const state={lang:"uz",cat:"all",view:"all",saved:new Set(),user:null,jobs:[],total:0,stats:{total:0,today:0},loaded:false,err:false};
 const t=k=>T[state.lang][k]??T.uz[k]??k;
@@ -191,34 +191,50 @@ function salaryText(j){
   if(state.lang!=="en")s=s.replace(".",",");
   s+=" "+t("mln");if(j.x)s+=" "+t("x_"+j.x);return s;
 }
-function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+
+async function api(url,opt={}){
+  try{
+    const r=await fetch(url,{headers:{"Content-Type":"application/json",...opt.headers},...opt});
+    const d=await r.json();
+    return {ok:r.ok,data:d};
+  }catch(e){
+    return {ok:false,data:null};
+  }
+}
+
+/* ---------- UI va Tilni Yangilash ---------- */
+function updateI18n(){
+  $$("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n");
+    if(T[state.lang][k]) el.textContent=T[state.lang][k];
+  });
+  $$("[data-ph]").forEach(el=>{
+    const k=el.getAttribute("data-ph");
+    if(T[state.lang][k]) el.placeholder=T[state.lang][k];
+  });
+  renderCats();
+  fillRegions($("#regionTop"),"all_reg");
+  fillRegions($("#region"),"all_reg");
+  fillRegions($("#pRegion"),"choose");
+  fillRegions($("#prRegion"),"choose");
+}
+
+function renderCats(){
+  const box=$("#cats"); if(!box) return;
+  box.innerHTML=CATS.map(c=>`<button class="chip" data-cat="${c}" aria-pressed="${state.cat===c}">${esc(t("c_"+c))}</button>`).join("");
+}
+
+function renderStats(){
+  if($("#statCount")) $("#statCount").textContent=state.stats.total;
+  if($("#statNew")) $("#statNew").textContent=state.stats.today;
+}
 
 function fillRegions(sel,allKey){
+  if(!sel) return;
   const cur=sel.value;
   sel.innerHTML=(allKey?`<option value="">${esc(t(allKey))}</option>`:"")+Object.keys(REG).map(r=>`<option value="${esc(r)}">${esc(regName(r))}</option>`).join("");
   sel.value=cur&&REG[cur]?cur:"";
 }
-function fillDistricts(regSel,distSel,allKey){
-  const cur=distSel.value, r=regSel.value;
-  distSel.innerHTML=`<option value="">${esc(t(allKey))}</option>`+(r?REG[r].d.map(d=>`<option>${esc(d)}</option>`).join(""):"");
-  distSel.disabled=!r;
-  distSel.value=r&&REG[r].d.includes(cur)?cur:"";
-}
-function fillSimple(){
-  const c=$("#pCat").value,ty=$("#pType").value;
-  $("#pCat").innerHTML=CATS.slice(1).map(k=>`<option value="${k}">${esc(t("c_"+k))}</option>`).join("");
-  $("#pType").innerHTML=["full","part","intern"].map(k=>`<option value="${k}">${esc(t("t_"+k))}</option>`).join("");
-  if(c)$("#pCat").value=c;if(ty)$("#pType").value=ty;
-  const f=$("#pr6").value;
-  $("#pr6").innerHTML=`<option value="">${esc(t("choose"))}</option>`+CATS.slice(1).map(k=>`<option value="${k}">${esc(t("c_"+k))}</option>`).join("");
-  $("#pr6").value=f;
-}
-
-const jobCache=new Map();
-let jobsReq=0;
-function debounce(fn,ms){let h;return(...a)=>{clearTimeout(h);h=setTimeout(()=>fn(...a),ms)}}
-function renderStats(){$("#statCount").textContent=state.stats.total;$("#statNew").textContent=state.stats.today}
 
 const cardHtml=j=>`
   <article class="job" data-id="${j.id}" tabindex="0">
@@ -238,3 +254,56 @@ const cardHtml=j=>`
     </div>
   </article>
 `;
+
+async function loadJobs(){
+  const box=$("#jobs"); if(!box) return;
+  box.innerHTML=`<div class="empty"><strong>Yuklanmoqda...</strong></div>`;
+  const r=await api("/api/jobs");
+  if(r.ok && r.data){
+    state.jobs=r.data.jobs||[];
+    state.stats=r.data.stats||{total:state.jobs.length,today:0};
+    renderStats();
+    if(state.jobs.length===0){
+      box.innerHTML=`<div class="empty"><strong>${esc(t("empty_t"))}</strong><p>${esc(t("empty_d"))}</p></div>`;
+    }else{
+      box.innerHTML=state.jobs.map(cardHtml).join("");
+    }
+  }else{
+    box.innerHTML=`<div class="empty"><strong>${esc(t("empty_t"))}</strong></div>`;
+  }
+}
+
+/* ---------- Boshlang'ich Sozlamalar ---------- */
+document.addEventListener("DOMContentLoaded",()=>{
+  updateI18n();
+  loadJobs();
+
+  // Til o'zgartirish
+  $$(".lang button").forEach(btn=>{ btn.addEventListener("click",()=>{ $$
+(".lang button").forEach(b=>b.setAttribute("aria-pressed","false"));
+      btn.setAttribute("aria-pressed","true");
+      state.lang=btn.getAttribute("data-lang");
+      updateI18n();
+      loadJobs();
+    });
+  });
+
+  // Kategoriya tanlash
+  if($("#cats")){
+    $("#cats").addEventListener("click",e=>{
+      const btn=e.target.closest(".chip");
+      if(!btn) return;
+      state.cat=btn.getAttribute("data-cat");
+      renderCats();
+      loadJobs();
+    });
+  }
+
+  // Mavzu (Dark/Light) o'zgartirish
+  if($("#themeBtn")){
+    $("#themeBtn").addEventListener("click",()=>{
+      const dark=document.documentElement.getAttribute("data-theme")==="dark";
+      document.documentElement.setAttribute("data-theme",dark?"light":"dark");
+    });
+  }
+});
