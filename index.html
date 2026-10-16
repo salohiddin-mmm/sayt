@@ -6,6 +6,7 @@
 <title>IshTopar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
 <style>
 :root{
   --ink:#12263A; --muted:#5B6B7A; --bg:#F3F7F7; --surface:#FFFFFF; --line:#D9E3E5;
@@ -245,8 +246,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="stats">
       <span><strong id="statCount">0</strong> <span data-i18n="stat_active"></span></span>
       <span><strong id="statNew">0</strong> <span data-i18n="stat_new"></span></span>
-      <!-- TO'G'RILANDI: t.me/ishtopar -> t.me/ishtoparuzb -->
-      <a class="btn btn-line btn-sm" href="https://t.me/ishtoparuzb" target="_blank" rel="noopener" data-i18n="tg"></a>
+      <a class="btn btn-line btn-sm" href="https://t.me/ishtoparuzb" target="_blank" rel="noopener">Telegram kanal</a>
     </div>
   </div>
 </section>
@@ -319,8 +319,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="wrap">
     <div><strong>IshTopar</strong><br><span data-i18n="foot1"></span></div>
     <div>
-      <!-- TO'G'RILANDI: t.me/ishtopar -> t.me/ishtoparuzb -->
-      <a href="https://t.me/ishtoparuzb" target="_blank" rel="noopener" data-i18n="tg"></a><br><span data-i18n="foot3"></span>
+      <a href="https://t.me/ishtoparuzb" target="_blank" rel="noopener">Telegram kanal</a><br><span data-i18n="foot3"></span>
     </div>
   </div>
 </footer>
@@ -338,128 +337,4 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <label for="f2" data-i18n="p_co"></label><input id="f2" required>
       <div class="two">
         <div><label for="pCat" data-i18n="p_cat"></label><select id="pCat"></select></div>
-        <div><label for="pType" data-i18n="p_type"></label><select id="pType"></select></div>
-      </div>
-      <div class="two">
-        <div><label for="pRegion" data-i18n="p_reg"></label><select id="pRegion" required></select></div>
-        <div><label for="pDistrict" data-i18n="p_dist"></label><select id="pDistrict"></select></div>
-      </div>
-      <label for="f5" data-i18n="p_sal"></label><input id="f5" data-ph="p_sal_ph">
-      <label for="f6" data-i18n="p_desc"></label><textarea id="f6" rows="4" required></textarea>
-      <label for="f7" data-i18n="p_contact"></label><input id="f7" required>
-      <div class="actions"><button class="btn btn-gold" type="submit" data-i18n="p_send"></button></div>
-    </form>
-  </div>
-</dialog>
-
-<dialog id="profDlg" aria-labelledby="prTitle">
-  <div class="dlg">
-    <button class="icon-btn close" data-close aria-label="Close">✕</button>
-    <h2 id="prTitle" data-i18n="pr_title"></h2>
-    <span class="pill" id="prRole"></span>
-    <form id="profForm">
-      <div class="photo-row">
-        <div class="photo" id="prPhoto"></div>
         <div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button type="button" class="btn btn-line btn-sm" id="photoPick" data-i18n="pr_photo_btn"></button>
-            <button type="button" class="btn btn-line btn-sm" id="photoDel" data-i18n="pr_photo_rm"></button>
-          </div>
-          <p class="note" style="margin:8px 0 0" data-i18n="pr_photo_hint"></p>
-          <input type="file" id="photoIn" accept="image/*" hidden>
-        </div>
-      </div>
-      <label for="pr1" data-i18n="pr_name"></label><input id="pr1" required maxlength="80">
-      <div class="two">
-        <div><label for="pr2" data-i18n="pr_email"></label><input id="pr2" type="email" autocomplete="email"></div>
-        <div><label for="pr3" data-i18n="pr_phone"></label><input id="pr3" type="tel" readonly></div>
-      </div>
-      <div class="two">
-        <div><label for="prRegion" data-i18n="p_reg"></label><select id="prRegion"></select></div>
-        <div><label for="prDistrict" data-i18n="p_dist"></label><select id="prDistrict"></select></div>
-      </div>
-      <div id="seekerFields">
-        <div class="two">
-          <div><label for="pr6" data-i18n="pr_field"></label><select id="pr6"></select></div>
-          <div><label for="pr7" data-i18n="pr_tg"></label><input id="pr7" placeholder="@username" maxlength="60"></div>
-        </div>
-        <label for="pr8" data-i18n="pr_about"></label><textarea id="pr8" rows="3" maxlength="300"></textarea>
-      </div>
-      <div id="empFields" hidden>
-        <label for="pr9" data-i18n="pr_co"></label><input id="pr9" maxlength="100">
-        <label for="pr10" data-i18n="pr_site"></label><input id="pr10" maxlength="120">
-        <label for="pr11" data-i18n="pr_co_about"></label><textarea id="pr11" rows="3" maxlength="400"></textarea>
-      </div>
-      <label class="inl" for="pr12"><input type="checkbox" id="pr12"> <span data-i18n="pr_notify"></span></label>
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="pr_save"></button><button class="btn btn-line" type="button" id="chPw" data-i18n="pr_change_pw"></button><span id="prMsg" class="note" style="margin:0;align-self:center" role="status"></span></div>
-      <p class="note" data-i18n="pr_private"></p>
-    </form>
-  </div>
-</dialog>
-
-<dialog id="loginDlg" aria-labelledby="lTitle">
-  <div class="dlg">
-    <button class="icon-btn close" data-close aria-label="Close">✕</button>
-    <h2 id="lTitle"></h2>
-    <div class="tabs" id="authTabs">
-      <button type="button" data-tab="in" aria-pressed="true" data-i18n="tab_in"></button>
-      <button type="button" data-tab="up" aria-pressed="false" data-i18n="tab_up"></button>
-    </div>
-    <div class="alert" id="authMsg" role="alert" hidden></div>
-
-    <form id="fIn" data-panel="in" novalidate>
-      <label for="inPhone" data-i18n="l_phone"></label><div class="phone"><span class="pfx">+998</span><input id="inPhone" data-phone type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="90 123 45 67" maxlength="12"></div>
-      <label for="inPass" data-i18n="l_pw"></label><div class="pwbox"><input id="inPass" type="password" autocomplete="current-password"><button type="button" class="pwtog" data-pw="inPass" data-i18n="a_show"></button></div>
-      <div class="linkrow">
-        <button type="button" class="linkbtn" data-go="forgot" data-i18n="a_forgot"></button>
-        <button type="button" class="linkbtn" data-go="sms" data-i18n="a_sms"></button>
-      </div>
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="l_in"></button></div>
-    </form>
-
-    <form id="fUp" data-panel="up" hidden novalidate>
-      <label for="l1" data-i18n="l_name"></label><input id="l1" autocomplete="name" maxlength="80">
-      <label for="upPhone" data-i18n="l_phone"></label><div class="phone"><span class="pfx">+998</span><input id="upPhone" data-phone type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="90 123 45 67" maxlength="12"></div>
-      <label for="upPass" data-i18n="l_pw"></label><div class="pwbox"><input id="upPass" type="password" autocomplete="new-password"><button type="button" class="pwtog" data-pw="upPass" data-i18n="a_show"></button></div>
-      <p class="note" style="margin:4px 0 0" data-i18n="a_pw_hint"></p>
-      <label class="sub" data-i18n="reg_role"></label>
-      <div class="roles">
-        <label class="role"><input type="radio" name="role" value="seeker" checked><strong data-i18n="role_seeker"></strong><span data-i18n="role_seeker_d"></span></label>
-        <label class="role"><input type="radio" name="role" value="employer"><strong data-i18n="role_emp"></strong><span data-i18n="role_emp_d"></span></label>
-      </div>
-      <div id="coRow" hidden><label for="l4" data-i18n="l_company"></label><input id="l4" autocomplete="organization" maxlength="100"></div>
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="a_next"></button></div>
-    </form>
-
-    <form id="fSms" data-panel="sms" hidden novalidate>
-      <p class="note" style="margin-top:12px" data-i18n="a_sms_hint"></p>
-      <label for="smsPhone" data-i18n="l_phone"></label><div class="phone"><span class="pfx">+998</span><input id="smsPhone" data-phone type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="90 123 45 67" maxlength="12"></div>
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="a_send"></button><button type="button" class="linkbtn" data-go="in" data-i18n="a_back"></button></div>
-    </form>
-
-    <form id="fForgot" data-panel="forgot" hidden novalidate>
-      <p class="note" style="margin-top:12px" data-i18n="a_forgot_hint"></p>
-      <label for="fgPhone" data-i18n="l_phone"></label><div class="phone"><span class="pfx">+998</span><input id="fgPhone" data-phone type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="90 123 45 67" maxlength="12"></div>
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="a_send"></button><button type="button" class="linkbtn" data-go="in" data-i18n="a_back"></button></div>
-    </form>
-
-    <form id="fCode" data-panel="code" hidden novalidate>
-      <p class="note" style="margin-top:12px" id="codeNote"></p>
-      <div class="demo" id="demoCode"></div>
-      <label for="codeIn" data-i18n="a_code"></label><input id="codeIn" class="codeinput" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••">
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="a_verify"></button><button class="btn btn-line" type="button" id="resendBtn" disabled></button><button type="button" class="linkbtn" data-go="in" data-i18n="a_back"></button></div>
-    </form>
-
-    <form id="fNew" data-panel="new" hidden novalidate>
-      <label for="np1" data-i18n="a_new_pw"></label><div class="pwbox"><input id="np1" type="password" autocomplete="new-password"><button type="button" class="pwtog" data-pw="np1" data-i18n="a_show"></button></div>
-      <p class="note" style="margin:4px 0 0" data-i18n="a_pw_hint"></p>
-      <label for="np2" data-i18n="a_new_pw2"></label><div class="pwbox"><input id="np2" type="password" autocomplete="new-password"><button type="button" class="pwtog" data-pw="np2" data-i18n="a_show"></button></div>
-      <div class="actions"><button class="btn btn-teal" type="submit" data-i18n="a_save_pw"></button></div>
-    </form>
-
-    <p class="note" data-i18n="l_note"></p>
-  </div>
-</dialog>
-
-</body>
-</html>
